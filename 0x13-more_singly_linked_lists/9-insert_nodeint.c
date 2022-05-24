@@ -1,43 +1,83 @@
+#include <stdlib.h>
 #include "lists.h"
 /**
-  * insert_nodeint_at_index - inserts a new node at a given position.
-  * @head: pointer to pointer of the first element on list.
-  * @idx: index of list where the new node should be added.
-  * @n: integer to be inserted.
-  *
-  * Return: address of the new node or NULL if it fails.
-  */
+ * insert_nodeint_at_index - insert node at given pos
+ * @head: head node
+ * @idx: index pos
+ * @n: new node data
+ * Return: address of new node
+ */
 listint_t *insert_nodeint_at_index(listint_t **head, unsigned int idx, int n)
 {
-	listint_t *new_node, *temp;
-	unsigned int count;
+	listint_t *node, *prev;
 
-	temp = *head;
+	if (!head)
+		return (0);
 
-	count = 0;
-	while (temp && count < idx - 1)
+	if (idx == 0)
 	{
-		temp = temp->next;
-		count++;
+		node = add_nodeint(head, n);
+		return (node);
 	}
 
-	new_node = malloc(sizeof(listint_t));
-	if (new_node != NULL)
+	node = malloc(sizeof(listint_t));
+	if (!node)
+		return (0);
+	node->n = n;
+
+	prev = get_nodeint_at_index(*head, idx - 1);
+	if (!prev)
 	{
-		new_node->n = n;
-		if (idx == 0)
-		{
-			new_node->next = *head;
-			*head = new_node;
-			return (new_node);
-		}
-		if (count + 1 == idx)
-		{
-			new_node->next = temp->next;
-			temp->next = new_node;
-			return (new_node);
-		}
+		free(node);
+		return (0);
 	}
-	free(new_node);
-	return (NULL);
+
+	node->next = prev->next;
+	prev->next = node;
+	return (node);
+}
+/**
+ * get_nodeint_at_index - get node at index
+ * @head: head node
+ * @index: index node
+ * Return: address of index node
+ */
+listint_t *get_nodeint_at_index(listint_t *head, unsigned int index)
+{
+	unsigned int i = 0;
+	listint_t *node;
+
+	node = head;
+
+	if (!node)
+		return (0);
+
+	while (node)
+	{
+		if (index == i)
+			return (node);
+		i++;
+		node = node->next;
+	}
+	return (0);
+}
+/**
+ * add_nodeint - add not at start
+ * Return: pointer to node
+ * @head: head node
+ * @n: new node data
+ */
+listint_t *add_nodeint(listint_t **head, const int n)
+{
+	listint_t *node;
+
+	if (!head)
+		return (0);
+	node = malloc(sizeof(listint_t));
+	if (!node)
+		return (0);
+	node->n = n;
+	node->next = *head;
+	*head = node;
+	return (node);
 }
