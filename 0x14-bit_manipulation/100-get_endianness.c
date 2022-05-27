@@ -1,4 +1,15 @@
-int set_bit(unsigned long int *n, unsigned int index);
-int clear_bit(unsigned long int *n, unsigned int index);
-unsigned int flip_bits(unsigned long int n, unsigned long int m);
-int get_endianness(void);
+#include <stdio.h>
+#include "holberton.h"
+
+/**
+ * get_endianness - Write a function that checks the endianness.
+ * Prototype: int get_endianness(void).
+ * Return: 1, if architecture is little endian, 0 in case of big endian.
+ */
+int get_endianness(void)
+{
+	unsigned int x = 1;
+	char *c = (char *) &x;
+
+	return ((int)*c);
+}
